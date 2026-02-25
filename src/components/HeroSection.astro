@@ -1,0 +1,83 @@
+  <!-- Hero Section -->
+  <section class="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
+    <!-- Animated Gradient Background -->
+    <div class="absolute inset-0 animated-gradient opacity-30"></div>
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(79,70,229,0.3),rgba(10,10,15,0)_50%)]"></div>
+        <!-- Background Video -->
+    <div class="absolute inset-0 overflow-hidden">
+      <video
+        autoplay muted loop playsinline class="w-full h-full object-cover">
+        <source src="/video/video-planetod.mp4" type="video/mp4" />
+      </video>
+    </div>
+
+    <!-- Dark Overlay -->
+    <div class="absolute inset-0 bg-gradient-to-b from-[#002635]/10 via-black/45 to-[#002635]/80"></div>
+    <!-- Content -->
+    <div class="container-custom relative z-10 text-center">
+      <div class="max-w-5xl mx-auto space-y-8 animate-fade-in">
+        <!-- Badge -->
+        <div class="inline-flex items-center space-x-2 glass-hero px-4 py-2 rounded-full">
+          <span class="w-2 h-2 bg-accent-highlight rounded-full animate-pulse"></span>
+          <span class="text-sm font-medium">Locally Based in Cusco, Peru</span>
+        </div>
+
+        <!-- Main Heading -->
+        <h1 class="text-display-xl font-display font-bold leading-none">
+          Discover the
+          <span class="gradient-text block">Magic of Peru</span>
+        </h1>
+
+        <!-- Description -->
+        <p class="text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
+          Authentic Lake Titicaca experiences. Cultural homestays. Responsible tourism. 
+          <span class="text-white font-semibold">Real connections with the Andes.</span>
+        </p>
+
+        <!-- CTA Buttons -->
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+          <a href="/tours" class="btn-premium">
+            <span>Explore Tours</span>
+          </a>
+          <a 
+            href="/contact" 
+            class="group px-8 py-4 rounded-full font-semibold text-white border-2 border-white/20 hover:border-white/40 transition-all duration-300 hover:bg-white/5"
+          >
+            Plan Your Journey
+            <svg class="inline-block w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
+          </a>
+        </div>
+
+        <!-- Trust Indicators -->
+        <div class="flex flex-wrap items-center justify-center gap-8 pt-12 text-sm text-gray-400">
+          <div class="flex items-center space-x-2">
+            <svg class="w-5 h-5 text-accent-blue" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+            </svg>
+            <span>4.8★ Rated on TripAdvisor</span>
+          </div>
+          <div class="flex items-center space-x-2">
+            <svg class="w-5 h-5 text-accent-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span>Licensed & Registered</span>
+          </div>
+          <div class="flex items-center space-x-2">
+            <svg class="w-5 h-5 text-accent-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+            </svg>
+            <span>Local Expert Guides</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scroll Indicator -->
+    <div class="absolute bottom-12 left-1/2 -translate-x-1/2 animate-bounce">
+      <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+      </svg>
+    </div>
+  </section>

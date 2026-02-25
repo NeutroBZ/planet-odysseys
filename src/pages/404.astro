@@ -1,0 +1,64 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout 
+  title="Page Not Found"
+  description="The page you're looking for doesn't exist."
+>
+  <section class="min-h-screen flex items-center justify-center section-padding">
+    <div class="container-custom text-center">
+      <div class="max-w-2xl mx-auto space-y-8">
+        <!-- 404 Number -->
+        <div class="text-display-xl font-display font-bold gradient-text">
+          404
+        </div>
+
+        <!-- Message -->
+        <h1 class="text-display-sm font-display font-bold">
+          Page Not Found
+        </h1>
+        
+        <p class="text-xl text-gray-400 leading-relaxed">
+          Looks like you've wandered off the beaten path. The page you're looking for doesn't exist or has been moved.
+        </p>
+
+        <!-- Action Buttons -->
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-8">
+          <a href="/" class="btn-premium">
+            <span>Back to Home</span>
+          </a>
+          <a 
+            href="/tours" 
+            class="px-8 py-4 rounded-full font-semibold text-white border-2 border-white/20 hover:border-white/40 transition-all duration-300 hover:bg-white/5"
+          >
+            Browse Tours
+          </a>
+        </div>
+
+        <!-- Search Suggestion -->
+        <div class="pt-12">
+          <p class="text-sm text-gray-500 mb-4">Looking for something specific?</p>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-2xl mx-auto">
+            <a href="/destinations" class="glass-strong rounded-xl p-4 hover:border-accent-blue transition-colors">
+              <div class="text-2xl mb-2">🏔️</div>
+              <div class="text-sm font-medium">Destinations</div>
+            </a>
+            <a href="/tours" class="glass-strong rounded-xl p-4 hover:border-accent-blue transition-colors">
+              <div class="text-2xl mb-2">🎯</div>
+              <div class="text-sm font-medium">All Tours</div>
+            </a>
+            <a href="/blog" class="glass-strong rounded-xl p-4 hover:border-accent-blue transition-colors">
+              <div class="text-2xl mb-2">📖</div>
+              <div class="text-sm font-medium">Travel Stories</div>
+            </a>
+            <a href="/contact" class="glass-strong rounded-xl p-4 hover:border-accent-blue transition-colors">
+              <div class="text-2xl mb-2">💬</div>
+              <div class="text-sm font-medium">Contact Us</div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,62 @@
+---
+import { getToursByCategory } from '../data/tours';
+
+const transfers = getToursByCategory('transfers');
+---
+
+<section class="section-padding">
+  <div class="container-custom">
+
+    <div class="flex items-end justify-between mb-12">
+      <div>
+        <h2 class="text-display-sm font-display font-bold">
+          Featured <span class="gradient-text">Transfers</span>
+        </h2>
+        <p class="text-gray-400 mt-4">
+          Safe and reliable transportation services across Peru.
+        </p>
+      </div>
+
+      <a 
+        href="/transfers"
+        class="hidden md:inline-block text-accent-blue font-semibold hover:underline"
+      >
+        View All Transfers →
+      </a>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      {transfers.map((transfer) => (
+        <a href={`/tour/${transfer.slug}`} class="group card-hover">
+          <article class="glass-strong rounded-2xl overflow-hidden">
+            <div class="relative aspect-[4/3] overflow-hidden">
+              <img
+                src={transfer.image}
+                alt={transfer.title}
+                class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                loading="lazy"
+              />
+            </div>
+
+            <div class="p-6 space-y-4">
+              <h3 class="text-xl font-display font-bold group-hover:text-accent-blue transition-colors">
+                {transfer.shortTitle}
+              </h3>
+
+              <div class="flex items-center justify-between">
+                <span class="text-sm text-gray-400">
+                  {transfer.duration}
+                </span>
+
+                <div class="text-xl font-bold text-accent-blue">
+                  ${transfer.price}
+                </div>
+              </div>
+            </div>
+          </article>
+        </a>
+      ))}
+    </div>
+
+  </div>
+</section>

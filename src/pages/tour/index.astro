@@ -1,0 +1,220 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { tours } from '../../data/tours';
+
+// Agrupar tours por categoría
+const toursByCategory = {
+  'lake-titicaca': tours.filter(t => t.category === 'lake-titicaca'),
+  'bolivia': tours.filter(t => t.category === 'bolivia'),
+  'transfers': tours.filter(t => t.category === 'transfers'),
+  'packages': tours.filter(t => t.category === 'packages')
+};
+
+const categoryInfo = {
+  'lake-titicaca': {
+    title: 'Lake Titicaca Tours',
+    description: 'Discover the magical floating islands, ancient cultures, and stunning landscapes of the world\'s highest navigable lake.'
+  },
+  'bolivia': {
+    title: 'Bolivia Adventures',
+    description: 'Cross-border experiences to Bolivia\'s most spectacular destinations, including the otherworldly Uyuni Salt Flats.'
+  },
+  'transfers': {
+    title: 'Transfers & Transportation',
+    description: 'Comfortable and reliable transfers between Peru\'s top destinations, including scenic routes and private services.'
+  },
+  'packages': {
+    title: 'Travel Packages',
+    description: 'Curated multi-day packages combining the best of Lake Titicaca, Cusco, and beyond.'
+  }
+};
+
+const formatPrice = (price: number) => {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0
+  }).format(price);
+};
+
+const categoryLabels = {
+  'lake-titicaca': 'Lake Titicaca',
+  'bolivia': 'Bolivia',
+  'transfers': 'Transfer',
+  'packages': 'Package'
+};
+---
+
+<BaseLayout 
+  title="All Tours & Experiences | Planet Odysseys"
+  description="Browse our complete collection of Lake Titicaca tours, Bolivia adventures, transfers, and travel packages."
+>
+
+<main class="min-h-screen">
+
+  {/* Hero */}
+  <section class="relative h-[80vh] min-h-[700px] overflow-hidden">
+    <div class="absolute inset-0">
+      <img 
+        src="/images/tours-bg-planet-odysseys.webp" 
+        alt="Tours in Peru and Bolivia"
+        class="w-full h-full object-cover"
+      />
+    </div>
+    {/* Gradiente de izquierda a derecha */}
+    <div class="absolute inset-0 bg-gradient-to-r from-[#0a3a4d] via-[#0a3a4d]/50 to-transparent"></div>
+    <div class="absolute inset-0 animated-gradient opacity-30"></div>
+
+    <div class="container-custom relative z-10 h-full flex items-center">
+      <div class="max-w-3xl">
+        <h1 class="text-5xl md:text-6xl lg:text-7xl font-display font-bold mb-6">
+          Our <span class="gradient-text">Tours</span> & Experiences
+        </h1>
+        <p class="text-xl text-white/80 leading-relaxed">
+          From Lake Titicaca to Bolivia and beyond, discover authentic experiences crafted by local experts.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  {/* Tours by Category */}
+  <section class="section-padding">
+    <div class="container-custom space-y-24">
+
+      {Object.entries(toursByCategory).map(([category, categoryTours]) => (
+        <div class="scroll-mt-24" id={category}>
+
+          {/* Category Header */}
+          <div class="mb-12">
+            <h2 class="text-4xl md:text-5xl font-display font-bold mb-4 gradient-text">
+              {categoryInfo[category].title}
+            </h2>
+            <p class="text-lg text-white/70 max-w-2xl">
+              {categoryInfo[category].description}
+            </p>
+          </div>
+
+          {/* Grid */}
+          {categoryTours.length > 0 ? (
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+              {categoryTours.map((tour) => (
+                <a 
+                  href={`/tour/${tour.slug}`}
+                  class="group block glass card-hover rounded-2xl overflow-hidden"
+                >
+
+                  {/* Image */}
+                  <div class="relative h-72 overflow-hidden">
+                    <img 
+                      src={tour.image}
+                      alt={tour.title}
+                      class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                    />
+
+                    {/* Badges */}
+                    <div class="absolute top-4 left-4 flex flex-wrap gap-2">
+                      {tour.featured && (
+                        <span class="glass-strong px-3 py-1 rounded-full text-sm font-semibold">
+                          Featured
+                        </span>
+                      )}
+                      <span class="glass px-3 py-1 rounded-full text-sm font-semibold">
+                        {categoryLabels[tour.category]}
+                      </span>
+                    </div>
+
+                    {/* Price */}
+                    <div class="absolute bottom-4 right-4">
+                      <div class="glass-strong px-4 py-2 rounded-full">
+                        <span class="text-sm text-white/70">from</span>
+                        <span class="text-xl font-bold ml-1">{formatPrice(tour.price)}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Content */}
+                  <div class="p-6">
+                    <div class="flex items-center justify-between mb-3">
+                      <h3 class="text-xl font-bold line-clamp-1 group-hover:gradient-text transition-all">
+                        {tour.shortTitle}
+                      </h3>
+
+                      {tour.rating > 0 && (
+                        <div class="flex items-center gap-1 glass px-2 py-1 rounded-full text-sm">
+                          <span>★</span>
+                          <span>{tour.rating}</span>
+                          <span class="text-white/60">({tour.reviews})</span>
+                        </div>
+                      )}
+                    </div>
+
+                    <p class="text-white/70 text-sm mb-4 line-clamp-2">
+                      {tour.description}
+                    </p>
+
+                    {/* Details */}
+                    <div class="flex items-center gap-4 text-sm text-white/60 mb-4">
+                      <span>{tour.duration}</span>
+                      <span class="line-clamp-1">{tour.destination}</span>
+                    </div>
+
+                    {/* Highlights */}
+                    <div class="flex flex-wrap gap-2 mb-4">
+                      {tour.highlights.slice(0, 3).map((highlight) => (
+                        <span class="text-xs glass px-2 py-1 rounded-full text-white/60">
+                          {highlight}
+                        </span>
+                      ))}
+                      {tour.highlights.length > 3 && (
+                        <span class="text-xs glass px-2 py-1 rounded-full text-white/60">
+                          +{tour.highlights.length - 3}
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Footer */}
+                    <div class="flex items-center justify-between">
+                      <span class="text-sm text-white/40">{tour.duration}</span>
+                      <span class="text-sm group-hover:translate-x-2 transition-transform">
+                        View Details →
+                      </span>
+                    </div>
+                  </div>
+                </a>
+              ))}
+
+            </div>
+          ) : (
+            <div class="glass p-12 text-center rounded-2xl">
+              <p class="text-white/60 text-lg">
+                No tours available in this category yet.
+              </p>
+            </div>
+          )}
+
+        </div>
+      ))}
+
+    </div>
+  </section>
+
+  {/* CTA */}
+  <section class="py-32 glass-hero">
+    <div class="container-custom text-center">
+      <h2 class="text-4xl md:text-5xl font-display font-bold mb-6">
+        Can't Find What You're Looking For?
+      </h2>
+      <p class="text-xl text-white/80 mb-12 max-w-2xl mx-auto">
+        We specialize in creating custom itineraries tailored to your needs.
+      </p>
+      <a href="/contact" class="btn-premium inline-block">
+        <span>Contact Us</span>
+      </a>
+    </div>
+  </section>
+
+</main>
+
+</BaseLayout>

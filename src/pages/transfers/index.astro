@@ -1,0 +1,171 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { tours } from '../../data/tours';
+
+// Filtrar solo transfers
+const transfers = tours.filter(t => t.category === 'transfers');
+
+const formatPrice = (price: number) => {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0
+  }).format(price);
+};
+---
+
+<BaseLayout 
+  title="Transportation Services Peru | Planet Odysseys"
+  description="Comfortable and reliable transportation services in Peru. Direct buses, private transfers, and scenic routes between Cusco, Puno, Juliaca and Bolivia."
+>
+
+<main class="min-h-screen">
+
+  <section class="relative h-[80vh] min-h-[700px] overflow-hidden">
+    <div class="absolute inset-0">
+      <img 
+        src="/images/transfer-bg-planet-odysseys.webp" 
+        alt="Transportation Services in Peru"
+        class="w-full h-full object-cover"
+      />
+    </div>
+    <div class="absolute inset-0 bg-gradient-to-r from-[#0a3a4d] via-[#0a3a4d]/50 to-transparent"></div>
+    <div class="absolute inset-0 animated-gradient opacity-30"></div>
+
+    <div class="container-custom relative z-10 h-full flex items-center">
+      <div class="max-w-3xl">
+        <h1 class="text-5xl md:text-6xl lg:text-7xl font-display font-bold mb-6">
+          Transportation <span class="gradient-text">Services</span> Peru
+        </h1>
+        <p class="text-xl text-white/80 leading-relaxed">
+          Safe, comfortable and reliable transfers between Peru's top destinations. 
+          From airport pickups to overnight buses, we've got you covered.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-padding">
+    <div class="container-custom">
+
+      <div class="mb-12">
+        <h2 class="text-4xl md:text-5xl font-display font-bold mb-4 gradient-text">
+          Transfers & Transportation
+        </h2>
+        <p class="text-lg text-white/70 max-w-2xl">
+          Comfortable and reliable transfers between Peru's top destinations, including scenic routes and private services.
+        </p>
+      </div>
+
+      {transfers.length > 0 ? (
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+          {transfers.map((transfer) => (
+            <a 
+              href={`/tour/${transfer.slug}`}
+              class="group block glass card-hover rounded-2xl overflow-hidden"
+            >
+
+              <div class="relative h-56 overflow-hidden">
+                <img 
+                  src={transfer.image}
+                  alt={transfer.title}
+                  class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                />
+
+                <div class="absolute top-4 left-4 flex flex-wrap gap-2">
+                  {transfer.featured && (
+                    <span class="glass-strong px-3 py-1 rounded-full text-sm font-semibold">
+                      Featured
+                    </span>
+                  )}
+                  <span class="glass px-3 py-1 rounded-full text-sm font-semibold">
+                    Transfer
+                  </span>
+                </div>
+
+                <div class="absolute bottom-4 right-4">
+                  <div class="glass-strong px-4 py-2 rounded-full">
+                    <span class="text-sm text-white/70">from</span>
+                    <span class="text-xl font-bold ml-1">{formatPrice(transfer.price)}</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="p-6">
+                <div class="flex items-center justify-between mb-3">
+                  <h3 class="text-xl font-bold line-clamp-1 group-hover:gradient-text transition-all">
+                    {transfer.shortTitle}
+                  </h3>
+
+                  {transfer.rating > 0 && (
+                    <div class="flex items-center gap-1 glass px-2 py-1 rounded-full text-sm">
+                      <span>★</span>
+                      <span>{transfer.rating}</span>
+                      <span class="text-white/60">({transfer.reviews})</span>
+                    </div>
+                  )}
+                </div>
+
+                <p class="text-white/70 text-sm mb-4 line-clamp-2">
+                  {transfer.description}
+                </p>
+
+                <div class="flex items-center gap-4 text-sm text-white/60 mb-4">
+                  <span>{transfer.duration}</span>
+                  <span class="line-clamp-1">{transfer.destination}</span>
+                </div>
+
+                <div class="flex flex-wrap gap-2 mb-4">
+                  {transfer.highlights.slice(0, 3).map((highlight) => (
+                    <span class="text-xs glass px-2 py-1 rounded-full text-white/60">
+                      {highlight}
+                    </span>
+                  ))}
+                  {transfer.highlights.length > 3 && (
+                    <span class="text-xs glass px-2 py-1 rounded-full text-white/60">
+                      +{transfer.highlights.length - 3}
+                    </span>
+                  )}
+                </div>
+
+                <div class="flex items-center justify-between">
+                  <span class="text-sm text-white/40">{transfer.duration}</span>
+                  <span class="text-sm group-hover:translate-x-2 transition-transform">
+                    View Details →
+                  </span>
+                </div>
+              </div>
+            </a>
+          ))}
+
+        </div>
+      ) : (
+        <div class="glass p-12 text-center rounded-2xl">
+          <p class="text-white/60 text-lg">
+            No transportation services available at the moment.
+          </p>
+        </div>
+      )}
+
+    </div>
+  </section>
+
+  <section class="py-32 glass-hero">
+    <div class="container-custom text-center">
+      <h2 class="text-4xl md:text-5xl font-display font-bold mb-6">
+        Need a Private Transfer or Custom Route?
+      </h2>
+      <p class="text-xl text-white/80 mb-12 max-w-2xl mx-auto">
+        We can arrange private transportation for groups, special schedules, or custom routes.
+      </p>
+      <a href="/contact" class="btn-premium inline-block">
+        <span>Contact Us</span>
+      </a>
+    </div>
+  </section>
+
+</main>
+
+</BaseLayout>

@@ -1,0 +1,223 @@
+---
+import type { Destination } from '../../data/destinations';
+import type { Tour } from '../../data/tours';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getDestinationBySlug, getAllDestinationSlugs } from '../../data/destinations';
+import { tours } from '../../data/tours';
+
+// Interface para parámetros
+interface Params {
+  slug: string;
+}
+
+// Función requerida para rutas dinámicas
+export function getStaticPaths(): { params: Params }[] {
+  const slugs = getAllDestinationSlugs();
+  return slugs.map(slug => ({
+    params: { slug }
+  }));
+}
+
+// Obtener el slug de la URL
+const { slug } = Astro.params as Params;
+
+// Encontrar el destino correspondiente
+const destination: Destination | undefined = getDestinationBySlug(slug);
+
+// Si no existe el destino, redirigir a 404
+if (!destination) {
+  return Astro.redirect('/404');
+}
+
+// Filtrar tours por destino
+const destinationTours: Tour[] = tours.filter((tour: Tour): boolean => {
+  if (destination.slug === 'lake-titicaca') {
+    return tour.category === 'lake-titicaca';
+  }
+  if (destination.slug === 'bolivia') {
+    return tour.category === 'bolivia';
+  }
+  if (destination.slug === 'colca-canyon') {
+    return false; // Sin tours por ahora
+  }
+  return false;
+});
+
+const formatPrice = (price: number): string => {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0
+  }).format(price);
+};
+---
+
+<BaseLayout 
+  title={`${destination.title} | Planet Odysseys`}
+  description={destination.description}
+>
+  <main class="min-h-screen">
+    {/* Hero Section */}
+    <section class="relative h-[70vh] min-h-[600px] overflow-hidden">
+      <div class="absolute inset-0">
+        <img 
+          src={destination.image}
+          alt={destination.name}
+          class="w-full h-full object-cover"
+        />
+        <div class={`absolute inset-0 bg-gradient-to-t ${destination.gradient} opacity-70`}></div>
+      </div>
+
+      <div class="absolute bottom-0 left-0 right-0 pb-20">
+        <div class="container-custom">
+          <div class="max-w-4xl">
+            <h1 class="text-5xl md:text-6xl lg:text-7xl font-display font-bold mb-4">
+              {destination.name}
+            </h1>
+            <p class="text-2xl text-white/90 mb-6">
+              {destination.subtitle}
+            </p>
+            <p class="text-xl text-white/80 max-w-2xl">
+              {destination.description}
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {/* About Section */}
+    <section class="section-padding">
+      <div class="container-custom">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+          
+          {/* Main content */}
+          <div class="lg:col-span-2">
+            <h2 class="text-3xl font-display font-bold mb-6 gradient-text">
+              About {destination.name}
+            </h2>
+            <p class="text-lg text-white/80 leading-relaxed mb-8">
+              {destination.longDescription}
+            </p>
+
+            {/* Highlights */}
+            <h3 class="text-2xl font-display font-bold mb-4">Highlights</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+              {destination.highlights.map((highlight: string) => (
+                <div class="flex items-start gap-3" key={highlight}>
+                  <span class="text-[#c6a15b] text-xl">✓</span>
+                  <span class="text-white/80">{highlight}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Sidebar */}
+          <div class="lg:col-span-1">
+            <div class="glass-strong p-8 rounded-2xl sticky top-24">
+              <h3 class="text-2xl font-bold mb-4">Quick Facts</h3>
+              <ul class="space-y-4">
+                <li class="flex justify-between">
+                  <span class="text-white/60">Tours Available</span>
+                  <span class="font-bold">{destinationTours.length}</span>
+                </li>
+                <li class="flex justify-between">
+                  <span class="text-white/60">Altitude</span>
+                  <span class="font-bold">
+                    {destination.slug === 'lake-titicaca' && '3,812m'}
+                    {destination.slug === 'colca-canyon' && '3,270m (deepest point)'}
+                    {destination.slug === 'bolivia' && '3,656m (Uyuni)'}
+                  </span>
+                </li>
+                <li class="flex justify-between">
+                  <span class="text-white/60">Best Time</span>
+                  <span class="font-bold">
+                    {destination.slug === 'lake-titicaca' && 'Apr - Oct'}
+                    {destination.slug === 'colca-canyon' && 'May - Sep'}
+                    {destination.slug === 'bolivia' && 'Apr - Nov'}
+                  </span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {/* Tours Section */}
+    {destinationTours.length > 0 && (
+      <section class="pb-20">
+        <div class="container-custom">
+          <h2 class="text-3xl font-display font-bold mb-8">
+            Tours in {destination.name}
+          </h2>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {destinationTours.map((tour: Tour) => (
+              <a 
+                href={`/tour/${tour.slug}`}
+                class="group block glass card-hover rounded-2xl overflow-hidden"
+                key={tour.id}
+              >
+                <div class="relative h-48 overflow-hidden">
+                  <img 
+                    src={tour.image}
+                    alt={tour.title}
+                    class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                  />
+                  {tour.featured && (
+                    <span class="absolute top-4 left-4 glass-strong px-3 py-1 rounded-full text-sm">
+                      Featured
+                    </span>
+                  )}
+                  <div class="absolute bottom-4 right-4">
+                    <div class="glass-strong px-4 py-2 rounded-full">
+                      <span class="text-sm text-white/70">from</span>
+                      <span class="text-xl font-bold ml-1">{formatPrice(tour.price)}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="p-6">
+                  <h3 class="text-xl font-bold mb-2 group-hover:gradient-text transition-all">
+                    {tour.shortTitle}
+                  </h3>
+                  <p class="text-white/70 text-sm mb-4 line-clamp-2">
+                    {tour.description}
+                  </p>
+                  <div class="flex items-center gap-4 text-sm text-white/60 mb-4">
+                    <span>{tour.duration}</span>
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <span class="text-sm text-white/40">View Details</span>
+                    <span class="text-sm group-hover:translate-x-2 transition-transform">→</span>
+                  </div>
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+    )}
+
+    {/* CTA */}
+    <section class="py-20 glass-hero">
+      <div class="container-custom text-center">
+        <h2 class="text-4xl md:text-5xl font-display font-bold mb-6">
+          Ready to Explore {destination.name}?
+        </h2>
+        <p class="text-xl text-white/80 mb-8 max-w-2xl mx-auto">
+          Contact us to create your perfect itinerary or book a tour directly.
+        </p>
+        <div class="flex flex-wrap gap-4 justify-center">
+          <a href="/contact" class="btn-premium">
+            <span>Contact Us</span>
+          </a>
+          <a href="/tour" class="glass-strong px-8 py-4 rounded-full font-semibold hover:bg-white/10 transition-colors">
+            View All Tours
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+</BaseLayout>

@@ -1,0 +1,336 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getTourBySlug, getAllTourSlugs, getToursByCategory } from '../../data/tours';
+
+export async function getStaticPaths() {
+  const slugs = getAllTourSlugs();
+  return slugs.map(slug => ({ params: { slug } }));
+}
+
+const { slug } = Astro.params;
+const tour = getTourBySlug(slug!);
+
+if (!tour) {
+  return Astro.redirect('/404');
+}
+
+// Obtener tours relacionados (misma categoría, excluyendo el actual)
+const relatedTours = getToursByCategory(tour.category)
+  .filter(t => t.id !== tour.id)
+  .slice(0, 3);
+
+// Formatear precio
+const formatPrice = (price: number) => {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0
+  }).format(price);
+};
+
+const categoryLabels = {
+  'lake-titicaca': 'Lake Titicaca',
+  'bolivia': 'Bolivia',
+  'transfers': 'Transfer',
+  'packages': 'Package'
+};
+---
+
+<BaseLayout 
+  title={`${tour.title} | Planet Odysseys`}
+  description={tour.metaDescription}
+>
+  <main class="min-h-screen">
+    {/* Hero Section */}
+    <section class="relative h-[70vh] min-h-[600px] overflow-hidden">
+      {/* Imagen de fondo */}
+      <div class="absolute inset-0">
+        <img 
+          src={tour.image} 
+          alt={tour.title}
+          class="w-full h-full object-cover"
+        />
+        <div class="absolute inset-0 bg-gradient-to-t from-[#001a24] via-[#001a24]/50 to-transparent"></div>
+      </div>
+
+      {/* Contenido del Hero */}
+      <div class="absolute bottom-0 left-0 right-0 pb-20">
+        <div class="container-custom">
+          <div class="max-w-4xl">
+            {/* Categoría y Featured */}
+            <div class="flex items-center gap-4 mb-4">
+              <span class="glass px-4 py-2 rounded-full text-sm">
+                {categoryLabels[tour.category]}
+              </span>
+              {tour.featured && (
+                <span class="bg-[#c6a15b] text-[#001a24] px-4 py-2 rounded-full text-sm font-semibold">
+                  Featured Tour
+                </span>
+              )}
+            </div>
+
+            <h1 class="text-5xl md:text-6xl lg:text-7xl font-display font-bold mb-6">
+              {tour.title}
+            </h1>
+
+            <div class="flex flex-wrap items-center gap-6 text-lg">
+              {/* Duración */}
+              <div class="flex items-center gap-2">
+                <span>{tour.duration}</span>
+              </div>
+
+              {/* Destino */}
+              <div class="flex items-center gap-2">
+                <span>{tour.destination}</span>
+              </div>
+
+              {/* Rating */}
+              {tour.rating > 0 && (
+                <div class="flex items-center gap-2">
+                  <span class="text-[#c6a15b]">★</span>
+                  <span class="font-bold">{tour.rating}</span>
+                  <span class="text-white/60">({tour.reviews} reviews)</span>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {/* Contenido Principal */}
+    <section class="section-padding">
+      <div class="container-custom">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+          {/* Columna Principal */}
+          <div class="lg:col-span-2 space-y-16">
+            {/* Descripción */}
+            <div>
+              <h2 class="text-3xl font-display font-bold mb-6">Overview</h2>
+              <p class="text-lg text-white/80 leading-relaxed">{tour.description}</p>
+            </div>
+
+            {/* Highlights */}
+            <div>
+              <h2 class="text-3xl font-display font-bold mb-6">Tour Highlights</h2>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {tour.highlights.map((highlight) => (
+                  <div class="flex items-start gap-3">
+                    <span class="text-[#c6a15b] text-xl">✓</span>
+                    <span class="text-white/80">{highlight}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Itinerario */}
+            <div>
+              <h2 class="text-3xl font-display font-bold mb-8">Itinerary</h2>
+              <div class="space-y-8">
+                {tour.itinerary.map((day) => (
+                  <div class="glass p-8 rounded-2xl">
+                    <div class="flex items-center gap-4 mb-4">
+                      <span class="bg-[#c6a15b] text-[#001a24] w-12 h-12 rounded-full flex items-center justify-center font-bold text-xl">
+                        {day.day}
+                      </span>
+                      <div>
+                        <h3 class="text-2xl font-bold">{day.title}</h3>
+                      </div>
+                    </div>
+                    <p class="text-white/80 mb-4">{day.description}</p>
+                    <ul class="space-y-2">
+                      {day.activities.map((activity) => (
+                        <li class="flex items-start gap-3 text-white/70">
+                          <span class="text-[#c6a15b]">•</span>
+                          {activity}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Incluye / No Incluye */}
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div class="glass p-8 rounded-2xl">
+                <h3 class="text-2xl font-bold mb-4 text-green-400">✓ Includes</h3>
+                <ul class="space-y-3">
+                  {tour.includes.map((item) => (
+                    <li class="flex items-start gap-3">
+                      <span class="text-green-400">✓</span>
+                      <span class="text-white/80">{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div class="glass p-8 rounded-2xl">
+                <h3 class="text-2xl font-bold mb-4 text-red-400">✗ Not Includes</h3>
+                <ul class="space-y-3">
+                  {tour.notIncludes.map((item) => (
+                    <li class="flex items-start gap-3">
+                      <span class="text-red-400">✗</span>
+                      <span class="text-white/80">{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+
+            {/* Información Importante */}
+            {tour.importantInfo.length > 0 && (
+              <div>
+                <h2 class="text-3xl font-display font-bold mb-6">Important Information</h2>
+                <div class="glass p-8 rounded-2xl">
+                  <ul class="space-y-4">
+                    {tour.importantInfo.map((info) => (
+                      <li class="flex items-start gap-3">
+                        <span class="text-[#c6a15b] text-xl">•</span>
+                        <span class="text-white/80">{info}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Sidebar */}
+          <div class="lg:col-span-1">
+            <div class="glass-strong p-8 rounded-2xl sticky top-24">
+              {/* Precio */}
+              <div class="text-center mb-8">
+                <span class="text-sm text-white/60">Price from</span>
+                <div class="text-5xl font-bold text-[#c6a15b] my-2">
+                  {formatPrice(tour.price)}
+                </div>
+                <span class="text-white/60">per person</span>
+              </div>
+
+              {/* Botones */}
+              <div class="space-y-4">
+                <a 
+                  href={`/book/${tour.slug}`} 
+                  class="btn-premium w-full text-center block"
+                >
+                  <span>Book This Tour</span>
+                </a>
+                <a 
+                  href="/contact" 
+                  class="glass block w-full text-center px-8 py-4 rounded-full font-semibold hover:bg-white/10 transition-colors"
+                >
+                  Contact Us
+                </a>
+              </div>
+
+              {/* Detalles rápidos */}
+              <div class="mt-8 pt-8 border-t border-white/10">
+                <div class="space-y-4">
+                  <div class="flex justify-between">
+                    <span class="text-white/60">Duration</span>
+                    <span class="font-medium">{tour.duration}</span>
+                  </div>
+                  <div class="flex justify-between">
+                    <span class="text-white/60">Destination</span>
+                    <span class="font-medium text-right">{tour.destination}</span>
+                  </div>
+                  <div class="flex justify-between">
+                    <span class="text-white/60">Category</span>
+                    <span class="font-medium">{categoryLabels[tour.category]}</span>
+                  </div>
+                  {tour.rating > 0 && (
+                    <div class="flex justify-between">
+                      <span class="text-white/60">Rating</span>
+                      <span class="font-medium flex items-center gap-1">
+                        <span class="text-[#c6a15b]">★</span> {tour.rating} ({tour.reviews})
+                      </span>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {/* Galería */}
+    {tour.gallery.length > 0 && (
+      <section class="pb-20">
+        <div class="container-custom">
+          <h2 class="text-3xl font-display font-bold mb-8">Gallery</h2>
+          <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {tour.gallery.map((image) => (
+              <div class="aspect-square overflow-hidden rounded-xl">
+                <img 
+                  src={image} 
+                  alt="" 
+                  class="w-full h-full object-cover hover:scale-110 transition-transform duration-500"
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    )}
+
+    {/* Tours Relacionados */}
+    {relatedTours.length > 0 && (
+      <section class="pb-20">
+        <div class="container-custom">
+          <h2 class="text-3xl font-display font-bold mb-8">You Might Also Like</h2>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {relatedTours.map((relatedTour) => (
+              <a 
+                href={`/tour/${relatedTour.slug}`}
+                class="group block glass card-hover rounded-2xl overflow-hidden"
+              >
+                <div class="relative h-56">
+                  <img 
+                    src={relatedTour.image} 
+                    alt={relatedTour.title}
+                    class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                  />
+                </div>
+                <div class="p-6">
+                  <h3 class="text-xl font-bold mb-2 group-hover:text-[#c6a15b] transition-colors">
+                    {relatedTour.shortTitle}
+                  </h3>
+                  <p class="text-white/60 text-sm mb-4 line-clamp-2">
+                    {relatedTour.description}
+                  </p>
+                  <div class="flex items-center justify-between">
+                    <span class="text-sm text-white/40">{relatedTour.duration}</span>
+                    <span class="text-[#c6a15b] font-bold">{formatPrice(relatedTour.price)}</span>
+                  </div>
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+    )}
+
+    {/* Booking CTA */}
+    <section class="py-20 glass-hero">
+      <div class="container-custom text-center">
+        <h2 class="text-4xl md:text-5xl font-display font-bold mb-6">
+          Ready to Experience {tour.shortTitle}?
+        </h2>
+        <p class="text-xl text-white/80 mb-8 max-w-2xl mx-auto">
+          Book now or contact us for more information about this amazing tour.
+        </p>
+        <div class="flex flex-wrap gap-4 justify-center">
+          <a href={`/book/${tour.slug}`} class="btn-premium">
+            <span>Book This Tour</span>
+          </a>
+          <a href="/contact" class="glass-strong px-8 py-4 rounded-full font-semibold hover:bg-white/10 transition-colors">
+            Contact Us
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+</BaseLayout>

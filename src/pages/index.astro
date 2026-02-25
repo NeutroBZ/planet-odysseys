@@ -1,0 +1,32 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import HeroSection from '../components/HeroSection.astro';
+import DestinationsSection from '../components/DestinationsSection.astro';
+import FeaturedToursSection from '../components/FeaturedToursSection.astro';
+import FeaturedTransfersSection from '../components/FeaturedTransfersSection.astro';
+import WhyChooseUsSection from '../components/WhyChooseUsSection.astro';
+import TravelStoriesSection from '../components/TravelStoriesSection.astro';
+import CTASection from '../components/CTASection.astro';
+import PremiumServiceSection from '../components/PremiumServiceSection.astro';
+
+import { getFeaturedTours } from '../data/tours';
+import { getFeaturedBlogs } from '../data/blogs';
+
+const featuredTours = getFeaturedTours();
+const featuredBlogs = getFeaturedBlogs();
+---
+
+<BaseLayout 
+  title="Authentic Lake Titicaca Tours & Cultural Experiences"
+  description="Experience the magic of Lake Titicaca with Planet Odysseys. Locally-based Peru travel company specializing in authentic cultural tours, homestays, and responsible tourism."
+  keywords={['Lake Titicaca tours', 'Peru tours', 'Puno tours', 'Lake Titicaca Peru', 'Amantani homestay', 'Uros Islands']}
+>
+  <HeroSection />
+  <PremiumServiceSection />
+  <FeaturedToursSection featuredTours={featuredTours} />
+  <DestinationsSection />
+  <FeaturedTransfersSection featuredTours={featuredTours} />
+  <WhyChooseUsSection />
+  <TravelStoriesSection featuredBlogs={featuredBlogs} />
+  <CTASection />
+</BaseLayout>

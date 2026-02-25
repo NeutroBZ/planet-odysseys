@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://planetodysseys.com/sitemap-index.xml

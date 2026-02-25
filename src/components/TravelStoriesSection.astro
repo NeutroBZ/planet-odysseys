@@ -1,0 +1,72 @@
+---
+interface Props {
+  featuredBlogs: {
+    slug: string;
+    image: string;
+    title: string;
+    excerpt: string;
+    category: string;
+    author: string;
+    date: string;
+    readTime: string;
+  }[];
+}
+
+const { featuredBlogs } = Astro.props;
+---
+
+<section class="section-padding bg-dark-100">
+  <div class="container-custom">
+    <div class="flex flex-col md:flex-row md:items-end md:justify-between mb-16">
+      <div class="max-w-2xl mb-8 md:mb-0">
+        <div class="inline-block px-4 py-2 rounded-full bg-accent-orange/10 text-accent-orange text-sm font-semibold mb-4">
+          Odyssey Stories
+        </div>
+        <h2 class="text-display-md font-display font-bold mb-6">
+          Travel <span class="gradient-text">Insights</span>
+        </h2>
+        <p class="text-xl text-gray-400">
+          Practical guides, local insights, and real stories from the road to help you plan your Peru adventure.
+        </p>
+      </div>
+      <a href="/blog" class="btn-premium whitespace-nowrap">
+        <span>Read All Stories</span>
+      </a>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {featuredBlogs.slice(0, 6).map((post) => (
+        <a href={`/blog/${post.slug}`} class="group card-hover">
+          <article class="glass-strong rounded-2xl overflow-hidden">
+            <div class="relative aspect-[16/10] overflow-hidden">
+              <img 
+                src={post.image} 
+                alt={post.title}
+                class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                loading="lazy"
+              />
+            </div>
+            <div class="p-6 space-y-4">
+              <div class="flex items-center space-x-3 text-sm text-gray-400">
+                <span class="text-accent-orange font-medium">{post.category}</span>
+                <span>•</span>
+                <span>{post.readTime} read</span>
+              </div>
+              <h3 class="text-xl font-display font-bold line-clamp-2 group-hover:text-accent-blue transition-colors">
+                {post.title}
+              </h3>
+              <p class="text-sm text-gray-400 line-clamp-2">
+                {post.excerpt}
+              </p>
+              <div class="flex items-center space-x-3 pt-4 border-t border-white/10 text-sm text-gray-400">
+                <span>{post.author}</span>
+                <span>•</span>
+                <span>{post.date}</span>
+              </div>
+            </div>
+          </article>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>

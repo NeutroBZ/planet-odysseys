@@ -1,0 +1,215 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="About Us | Planet Odysseys"
+  description="Discover our passion for creating unforgettable journeys with premium travel experiences and world-class service."
+>
+
+<!-- HERO -->
+<section class="relative h-[80vh] min-h-[600px] flex items-center overflow-hidden">
+  <div class="absolute inset-0">
+    <img 
+      src="/images/about-us-bg-planet.webp" 
+      alt="About Planet Odysseys"
+      class="w-full h-full object-cover"
+    />
+  </div>
+  <div class="absolute inset-0 bg-gradient-to-r from-[#001a24] via-[#001a24]/50 to-transparent"></div>
+  <div class="absolute inset-0 animated-gradient opacity-20"></div>
+
+  <div class="container-custom relative z-10">
+    <div class="max-w-3xl">
+      <h1 class="text-5xl md:text-6xl lg:text-7xl font-display font-bold mb-6">
+        About <span class="gradient-text">Planet Odysseys</span>
+      </h1>
+      <p class="text-xl text-white/80 leading-relaxed">
+        We craft extraordinary travel experiences designed to inspire, transform,
+        and connect you with the world in the most authentic way.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- OUR STORY -->
+<section class="section-padding">
+  <div class="container-custom">
+    <div class="grid lg:grid-cols-2 gap-12 lg:gap-24 items-center">
+      
+      <!-- Texto -->
+      <div class="space-y-6">
+        <span class="glass px-4 py-2 rounded-full text-sm font-semibold inline-block">Our Story</span>
+        <h2 class="text-4xl md:text-5xl font-display font-bold">
+          Born from <span class="gradient-text">Passion</span>
+        </h2>
+        <p class="text-white/70 leading-relaxed text-lg">
+          Founded with a deep passion for exploration, Planet Odysseys was born from
+          the desire to redefine the way people experience travel.
+        </p>
+        <p class="text-white/60 leading-relaxed">
+          We believe that travel is more than visiting destinations — it's about
+          meaningful connections, cultural immersion, and unforgettable moments.
+          Every journey we design reflects our commitment to excellence,
+          authenticity, and sustainability.
+        </p>
+
+        <div class="flex gap-8 pt-4">
+          <div>
+            <h3 class="text-3xl font-bold text-[#c6a15b]">10+</h3>
+            <p class="text-white/60">Years of Experience</p>
+          </div>
+          <div>
+            <h3 class="text-3xl font-bold text-[#c6a15b]">5K+</h3>
+            <p class="text-white/60">Happy Travelers</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Imagen -->
+      <div class="relative">
+        <div class="glass-strong rounded-3xl overflow-hidden aspect-[5/5]">
+          <img 
+            src="/images/our-history-us-planet.webp" 
+            alt="Our Story"
+            class="w-full h-full object-cover"
+          />
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- MISSION & VISION -->
+<section class="section-padding bg-[#002635]/40">
+  <div class="container-custom">
+    <div class="grid lg:grid-cols-2 gap-12 lg:gap-24 items-center">
+      
+      <!-- Imagen -->
+      <div class="relative order-2 lg:order-1">
+        <div class="glass-strong rounded-3xl overflow-hidden aspect-[5/5]">
+          <img 
+            src="/images/vision-us-planet.webp" 
+            alt="Our Mission"
+            class="w-full h-full object-cover"
+          />
+        </div>
+      </div>
+
+      <!-- Texto -->
+      <div class="space-y-8 order-1 lg:order-2">
+        <div class="glass-strong rounded-2xl p-8">
+          <span class="glass px-4 py-2 rounded-full text-sm font-semibold inline-block mb-4">Our Mission</span>
+          <p class="text-white/80 leading-relaxed text-lg">
+            To deliver transformative journeys that combine luxury, adventure,
+            and cultural depth while supporting local communities and protecting
+            natural heritage.
+          </p>
+        </div>
+
+        <div class="glass-strong rounded-2xl p-8">
+          <span class="glass px-4 py-2 rounded-full text-sm font-semibold inline-block mb-4">Our Vision</span>
+          <p class="text-white/80 leading-relaxed text-lg">
+            To become a global leader in experiential travel, known for innovation,
+            sustainability, and exceptional service.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- CORE VALUES -->
+<section class="section-padding">
+  <div class="container-custom text-center mb-16">
+    <span class="glass px-4 py-2 rounded-full text-sm font-semibold inline-block mb-4">Why Choose Us</span>
+    <h2 class="text-4xl md:text-5xl font-display font-bold">
+      Our Core <span class="gradient-text">Values</span>
+    </h2>
+    <p class="text-white/60 mt-4 max-w-2xl mx-auto text-lg">
+      The principles that guide everything we do.
+    </p>
+  </div>
+
+  <div class="container-custom">
+    <div class="grid md:grid-cols-3 gap-8">
+      
+      <div class="glass-strong rounded-3xl p-8 card-hover">
+        <h3 class="text-2xl font-bold mb-3">Authenticity</h3>
+        <p class="text-white/60 leading-relaxed">
+          Real experiences that connect you deeply with culture and people.
+        </p>
+      </div>
+
+      <div class="glass-strong rounded-3xl p-8 card-hover">
+        <h3 class="text-2xl font-bold mb-3">Excellence</h3>
+        <p class="text-white/60 leading-relaxed">
+          Meticulous planning and premium service at every stage.
+        </p>
+      </div>
+
+      <div class="glass-strong rounded-3xl p-8 card-hover">
+        <h3 class="text-2xl font-bold mb-3">Sustainability</h3>
+        <p class="text-white/60 leading-relaxed">
+          Responsible tourism that protects destinations for future generations.
+        </p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- TEAM -->
+<section class="section-padding bg-[#002635]/40">
+  <div class="container-custom">
+    <div class="grid lg:grid-cols-2 gap-12 lg:gap-24 items-center">
+      
+      <div class="space-y-6">
+        <span class="glass px-4 py-2 rounded-full text-sm font-semibold inline-block">Local Experts</span>
+        <h2 class="text-4xl md:text-5xl font-display font-bold">
+          Meet Our <span class="gradient-text">Team</span>
+        </h2>
+        <p class="text-white/70 leading-relaxed text-lg">
+          Passionate local guides and travel experts dedicated to showing you the true essence of our homeland.
+        </p>
+        <p class="text-white/60 leading-relaxed">
+          Our team consists of experienced professionals born and raised in the region.
+        </p>
+
+        <a href="/team" class="btn-premium inline-block">
+          <span>Meet the Team</span>
+        </a>
+      </div>
+
+      <div>
+        <div class="glass-strong rounded-3xl overflow-hidden aspect-[5/5]">
+          <img 
+            src="/images/about-us-planet.webp" 
+            alt="Our Team"
+            class="w-full h-full object-cover"
+          />
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="section-padding text-center">
+  <div class="container-custom max-w-3xl">
+    <h2 class="text-4xl md:text-5xl font-display font-bold mb-6">
+      Ready to Start Your <span class="gradient-text">Journey?</span>
+    </h2>
+    <p class="text-white/60 text-lg mb-10">
+      Let us design an unforgettable experience tailored exclusively for you.
+    </p>
+    <a href="/contact" class="btn-premium inline-block">
+      <span>Contact Us</span>
+    </a>
+  </div>
+</section>
+
+</BaseLayout>
