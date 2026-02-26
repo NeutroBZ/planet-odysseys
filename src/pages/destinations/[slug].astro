@@ -100,15 +100,15 @@ const formatPrice = (price: number): string => {
               {destination.longDescription}
             </p>
 
-            {/* Highlights */}
+            {/* Highlights - SIN PROP KEY */}
             <h3 class="text-2xl font-display font-bold mb-4">Highlights</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-              {destination.highlights.map((highlight: string) => (
-              <div class="flex items-start gap-3">
-                <span class="text-[#c6a15b] text-xl">✓</span>
-                <span class="text-white/80">{highlight}</span>
-              </div>
-))}
+              {destination.highlights.map((highlight: string, index: number) => (
+                <div class="flex items-start gap-3" data-index={index}>
+                  <span class="text-[#c6a15b] text-xl">✓</span>
+                  <span class="text-white/80">{highlight}</span>
+                </div>
+              ))}
             </div>
           </div>
 
@@ -153,11 +153,14 @@ const formatPrice = (price: number): string => {
           </h2>
 
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {destinationTours.map((tour: Tour) => (
+            {/* SIN PROP KEY EN EL <a> */}
+            {destinationTours.map((tour: Tour, tourIndex: number) => (
               <a 
-                  href={`/tour/${tour.slug}`}
-                  class="group block glass card-hover rounded-2xl overflow-hidden"
-                >
+                href={`/tour/${tour.slug}`}
+                class="group block glass card-hover rounded-2xl overflow-hidden"
+                data-tour-id={tour.id}
+                data-index={tourIndex}
+              >
                 <div class="relative h-48 overflow-hidden">
                   <img 
                     src={tour.image}
