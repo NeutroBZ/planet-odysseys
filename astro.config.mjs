@@ -19,7 +19,11 @@ export default defineConfig({
       applyBaseStyles: false,
     }),
     sitemap({
-      filter: (page) => !page.includes('/404'),
+      filter: (page) => {
+        // Verificar que page existe antes de usar includes
+        if (!page) return false;
+        return !page.includes('/404');
+      },
       changefreq: 'weekly',
       priority: 0.7,
       lastmod: new Date(),
