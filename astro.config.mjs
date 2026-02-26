@@ -18,16 +18,17 @@ export default defineConfig({
     tailwind({
       applyBaseStyles: false,
     }),
-    sitemap({
-      filter: (page) => {
-        // Verificar que page existe antes de usar includes
-        if (!page) return false;
-        return !page.includes('/404');
-      },
-      changefreq: 'weekly',
-      priority: 0.7,
-      lastmod: new Date(),
-    }),
+  sitemap({
+    filter: (page) => {
+      // Check if page exists
+      if (!page) return false;
+      return !page.includes('/404');
+    },
+    changefreq: 'weekly',
+    priority: 0.7,
+    lastmod: new Date(),
+    
+  }),
   ],
   image: {
     domains: ['planetodysseys.com'],
