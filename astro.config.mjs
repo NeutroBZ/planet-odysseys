@@ -6,38 +6,12 @@ import vercel from '@astrojs/vercel/static';
 export default defineConfig({
   site: 'https://planetodysseys.com',
   output: 'static',
-  adapter: vercel({
-    webAnalytics: {
-      enabled: true
-    },
-    speedInsights: {
-      enabled: true
-    }
-  }),
+  adapter: vercel(),
+
   integrations: [
-    tailwind({
-      applyBaseStyles: false,
-    }),
+    tailwind({ applyBaseStyles: false }),
     sitemap(),
   ],
-  image: {
-    domains: ['planetodysseys.com'],
-    remotePatterns: [{ protocol: 'https' }],
-  },
+
   compressHTML: true,
-  build: {
-    inlineStylesheets: 'auto',
-  },
-  vite: {
-    build: {
-      rollupOptions: {
-        output: {
-          manualChunks: undefined,
-        },
-      },
-    },
-    ssr: {
-      noExternal: ['motion'],
-    },
-  },
 });
