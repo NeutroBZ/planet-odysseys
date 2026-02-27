@@ -14,12 +14,10 @@ if (!tour) {
   return Astro.redirect('/404');
 }
 
-// Obtener tours relacionados (misma categoría, excluyendo el actual)
 const relatedTours = getToursByCategory(tour.category)
   .filter(t => t.id !== tour.id)
   .slice(0, 3);
 
-// Formatear precio
 const formatPrice = (price: number) => {
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
@@ -44,7 +42,6 @@ const categoryLabels = {
   <main class="min-h-screen">
     {/* Hero Section */}
     <section class="relative h-[70vh] min-h-[600px] overflow-hidden">
-      {/* Imagen de fondo */}
       <div class="absolute inset-0">
         <img 
           src={tour.image} 
@@ -54,11 +51,9 @@ const categoryLabels = {
         <div class="absolute inset-0 bg-gradient-to-t from-[#001a24] via-[#001a24]/50 to-transparent"></div>
       </div>
 
-      {/* Contenido del Hero */}
       <div class="absolute bottom-0 left-0 right-0 pb-20">
         <div class="container-custom">
           <div class="max-w-4xl">
-            {/* Categoría y Featured */}
             <div class="flex items-center gap-4 mb-4">
               <span class="glass px-4 py-2 rounded-full text-sm">
                 {categoryLabels[tour.category]}
@@ -75,17 +70,12 @@ const categoryLabels = {
             </h1>
 
             <div class="flex flex-wrap items-center gap-6 text-lg">
-              {/* Duración */}
               <div class="flex items-center gap-2">
                 <span>{tour.duration}</span>
               </div>
-
-              {/* Destino */}
               <div class="flex items-center gap-2">
                 <span>{tour.destination}</span>
               </div>
-
-              {/* Rating */}
               {tour.rating > 0 && (
                 <div class="flex items-center gap-2">
                   <span class="text-[#c6a15b]">★</span>
@@ -105,11 +95,40 @@ const categoryLabels = {
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
           {/* Columna Principal */}
           <div class="lg:col-span-2 space-y-16">
-            {/* Descripción */}
+            {/* Overview - Usa el nuevo campo overview si existe, si no usa description */}
             <div>
               <h2 class="text-3xl font-display font-bold mb-6">Overview</h2>
-              <p class="text-lg text-white/80 leading-relaxed">{tour.description}</p>
+              {tour.overview ? (
+                <div 
+                  class="prose prose-invert prose-p:text-white/80 prose-p:leading-relaxed prose-p:mb-4 prose-strong:text-[#c6a15b] prose-em:text-white/60 prose-a:text-[#c6a15b] prose-a:no-underline hover:prose-a:underline max-w-none"
+                  set:html={tour.overview}
+                />
+              ) : (
+                <p class="text-lg text-white/80 leading-relaxed">{tour.description}</p>
+              )}
             </div>
+
+            {/* What to Expect - Nuevo campo */}
+            {tour.whatToExpect && (
+              <div class="glass p-8 rounded-2xl">
+                <h2 class="text-3xl font-display font-bold mb-6">What to Expect on Your Tour?</h2>
+                <div 
+                  class="prose prose-invert prose-p:text-white/80 prose-p:leading-relaxed prose-p:mb-4 max-w-none"
+                  set:html={tour.whatToExpect.description}
+                />
+                
+                {tour.whatToExpect.quickFacts && tour.whatToExpect.quickFacts.length > 0 && (
+                  <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {tour.whatToExpect.quickFacts.map((fact) => (
+                      <div class="flex items-start gap-3">
+                        <span class="text-[#c6a15b] text-xl">•</span>
+                        <span class="text-white/80 text-sm">{fact}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
 
             {/* Highlights */}
             <div>
@@ -124,33 +143,55 @@ const categoryLabels = {
               </div>
             </div>
 
-            {/* Itinerario */}
+            {/* Itinerario con Acordeón - Todos los tours usan el mismo sistema */}
             <div>
-              <h2 class="text-3xl font-display font-bold mb-8">Itinerary</h2>
-              <div class="space-y-8">
+              <h2 class="text-3xl font-display font-bold mb-8">Tour Itinerary</h2>
+              
+              <div class="space-y-4">
                 {tour.itinerary.map((day) => (
-                  <div class="glass p-8 rounded-2xl">
-                    <div class="flex items-center gap-4 mb-4">
-                      <span class="bg-[#c6a15b] text-[#001a24] w-12 h-12 rounded-full flex items-center justify-center font-bold text-xl">
-                        {day.day}
-                      </span>
-                      <div>
-                        <h3 class="text-2xl font-bold">{day.title}</h3>
+                  <div class="glass rounded-2xl overflow-hidden">
+                    <details class="group" open>
+                      <summary class="flex items-center justify-between p-6 cursor-pointer list-none">
+                        <div class="flex items-center gap-4">
+                          <span class="bg-[#c6a15b] text-[#001a24] w-12 h-12 rounded-full flex items-center justify-center font-bold text-xl flex-shrink-0">
+                            {day.day}
+                          </span>
+                          <div>
+                            <h3 class="text-2xl font-bold text-left">{day.title}</h3>
+                            <p class="text-white/60 text-left">{day.description}</p>
+                          </div>
+                        </div>
+                        {/* Ícono ^ que rota 180° cuando está abierto */}
+                        <span class="text-[#c6a15b] text-2xl transition-transform duration-300 group-open:rotate-180">^</span>
+                      </summary>
+                      <div class="px-6 pb-6 pt-2 border-t border-white/10">
+                        <div class="prose prose-invert max-w-none 
+                          prose-p:text-white/80 prose-p:leading-relaxed prose-p:mb-4 prose-p:ml-0
+                          prose-h4:text-white prose-h4:text-xl prose-h4:font-bold prose-h4:mt-6 prose-h4:mb-3 prose-h4:ml-0
+                          prose-ul:text-white/80 prose-ul:my-4 prose-ul:pl-6
+                          prose-li:text-white/80 prose-li:my-1
+                          prose-strong:text-[#c6a15b]">
+                          {day.activities.map((activity) => (
+                            <div set:html={activity} />
+                          ))}
+                        </div>
                       </div>
-                    </div>
-                    <p class="text-white/80 mb-4">{day.description}</p>
-                    <ul class="space-y-2">
-                      {day.activities.map((activity) => (
-                        <li class="flex items-start gap-3 text-white/70">
-                          <span class="text-[#c6a15b]">•</span>
-                          {activity}
-                        </li>
-                      ))}
-                    </ul>
+                    </details>
                   </div>
                 ))}
               </div>
             </div>
+
+            {/* Itinerario Detallado (solo si existe y no estamos usando ya overview extendido) */}
+            {tour.detailedItinerary && !tour.overview && (
+              <div>
+                <h2 class="text-3xl font-display font-bold mb-6">Complete Tour Description</h2>
+                <div 
+                  class="glass p-8 rounded-2xl prose prose-invert prose-headings:text-white prose-h3:text-2xl prose-h4:text-xl prose-p:text-white/80 prose-li:text-white/80 prose-strong:text-[#c6a15b] prose-ul:list-disc prose-ul:pl-6 max-w-none"
+                  set:html={tour.detailedItinerary}
+                />
+              </div>
+            )}
 
             {/* Incluye / No Incluye */}
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -167,7 +208,7 @@ const categoryLabels = {
               </div>
 
               <div class="glass p-8 rounded-2xl">
-                <h3 class="text-2xl font-bold mb-4 text-red-400">✗ Not Includes</h3>
+                <h3 class="text-2xl font-bold mb-4 text-red-400">✗ Not Included</h3>
                 <ul class="space-y-3">
                   {tour.notIncludes.map((item) => (
                     <li class="flex items-start gap-3">
@@ -197,7 +238,7 @@ const categoryLabels = {
             )}
           </div>
 
-          {/* Sidebar */}
+          {/* Sidebar - sin cambios */}
           <div class="lg:col-span-1">
             <div class="glass-strong p-8 rounded-2xl sticky top-24">
               {/* Precio */}
@@ -209,14 +250,19 @@ const categoryLabels = {
                 <span class="text-white/60">per person</span>
               </div>
 
-              {/* Botones */}
+              {/* Botones con WeTravel */}
               <div class="space-y-4">
-                <a 
-                  href={`/book/${tour.slug}`} 
-                  class="btn-premium w-full text-center block"
-                >
-                  <span>Book This Tour</span>
-                </a>
+                {tour.wetravel ? (
+                  <div id="wetravel-widget" class="min-h-[50px]"></div>
+                ) : (
+                  <a 
+                    href={`/contact?tour=${tour.slug}`}
+                    class="btn-premium w-full text-center block"
+                  >
+                    <span>Book This Tour</span>
+                  </a>
+                )}
+                
                 <a 
                   href="/contact" 
                   class="glass block w-full text-center px-8 py-4 rounded-full font-semibold hover:bg-white/10 transition-colors"
@@ -234,7 +280,7 @@ const categoryLabels = {
                   </div>
                   <div class="flex justify-between">
                     <span class="text-white/60">Destination</span>
-                    <span class="font-medium text-right">{tour.destination}</span>
+                    <span class="font-medium text-right text-sm">{tour.destination}</span>
                   </div>
                   <div class="flex justify-between">
                     <span class="text-white/60">Category</span>
@@ -256,26 +302,6 @@ const categoryLabels = {
       </div>
     </section>
 
-    {/* Galería */}
-    {tour.gallery.length > 0 && (
-      <section class="pb-20">
-        <div class="container-custom">
-          <h2 class="text-3xl font-display font-bold mb-8">Gallery</h2>
-          <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {tour.gallery.map((image) => (
-              <div class="aspect-square overflow-hidden rounded-xl">
-                <img 
-                  src={image} 
-                  alt="" 
-                  class="w-full h-full object-cover hover:scale-110 transition-transform duration-500"
-                />
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-    )}
-
     {/* Tours Relacionados */}
     {relatedTours.length > 0 && (
       <section class="pb-20">
@@ -292,6 +318,7 @@ const categoryLabels = {
                     src={relatedTour.image} 
                     alt={relatedTour.title}
                     class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                    loading="lazy"
                   />
                 </div>
                 <div class="p-6">
@@ -323,9 +350,15 @@ const categoryLabels = {
           Book now or contact us for more information about this amazing tour.
         </p>
         <div class="flex flex-wrap gap-4 justify-center">
-          <a href={`/book/${tour.slug}`} class="btn-premium">
-            <span>Book This Tour</span>
-          </a>
+          {tour.wetravel ? (
+            <a href="#wetravel-widget" class="btn-premium scroll-smooth">
+              <span>Book This Tour</span>
+            </a>
+          ) : (
+            <a href={`/contact?tour=${tour.slug}`} class="btn-premium">
+              <span>Book This Tour</span>
+            </a>
+          )}
           <a href="/contact" class="glass-strong px-8 py-4 rounded-full font-semibold hover:bg-white/10 transition-colors">
             Contact Us
           </a>
@@ -333,4 +366,45 @@ const categoryLabels = {
       </div>
     </section>
   </main>
+
+  {/* Script de WeTravel */}
+  {tour.wetravel && (
+    <script 
+      define:vars={{ uid: tour.wetravel.uid, uuid: tour.wetravel.uuid }}
+      is:inline
+    >
+      (function() {
+        const script = document.createElement('script');
+        script.src = 'https://cdn.wetravel.com/widgets/embed_calendar.js';
+        script.id = 'wetravel_embed_calendar';
+        script.setAttribute('data-env', 'https://www.wetravel.com');
+        script.setAttribute('data-version', 'v0.3');
+        script.setAttribute('data-uid', uid);
+        script.setAttribute('data-uuid', uuid);
+        script.setAttribute('data-color', 'c6a15b');
+        script.setAttribute('data-text', 'Book Now');
+        script.setAttribute('data-title', 'Select Departure Date');
+        
+        const container = document.getElementById('wetravel-widget');
+        if (container) {
+          container.appendChild(script);
+        }
+      })();
+    </script>
+  )}
 </BaseLayout>
+
+<style is:global>
+  details > summary {
+    list-style: none;
+  }
+  details > summary::-webkit-details-marker {
+    display: none;
+  }
+  details[open] summary {
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+  .scroll-smooth {
+    scroll-behavior: smooth;
+  }
+</style>

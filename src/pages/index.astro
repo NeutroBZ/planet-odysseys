@@ -1,4 +1,5 @@
 ---
+// src/pages/index.astro
 import BaseLayout from '../layouts/BaseLayout.astro';
 import HeroSection from '../components/HeroSection.astro';
 import DestinationsSection from '../components/DestinationsSection.astro';
@@ -10,10 +11,11 @@ import CTASection from '../components/CTASection.astro';
 import PremiumServiceSection from '../components/PremiumServiceSection.astro';
 
 import { getFeaturedTours } from '../data/tours';
-import { getFeaturedBlogs } from '../data/blogs';
+import { getFeaturedBlog } from '../data/blog';
 
-const featuredTours = getFeaturedTours();
-const featuredBlogs = getFeaturedBlogs();
+// Obtener datos de manera asíncrona
+const featuredTours = await getFeaturedTours();
+const featuredBlogs = await getFeaturedBlog(3); // Limitamos a 3 posts destacados en el home
 ---
 
 <BaseLayout 
@@ -27,6 +29,6 @@ const featuredBlogs = getFeaturedBlogs();
   <DestinationsSection />
   <FeaturedTransfersSection featuredTours={featuredTours} />
   <WhyChooseUsSection />
-  <TravelStoriesSection featuredBlogs={featuredBlogs} />
+  <TravelStoriesSection featuredBlog={featuredBlogs} />
   <CTASection />
 </BaseLayout>

@@ -1,5 +1,7 @@
 ---
 import '../styles/global.css';
+import WhatsAppButton from '../components/WhatsAppButton.astro';
+import ContactSpecialist from '../components/ContactSpecialist.astro';
 
 interface Props {
   title: string;
@@ -92,12 +94,12 @@ const currentPath = Astro.url.pathname;
             >
               Transfers
             </a>
-            <!--- <a 
+            <a 
               href="/blog" 
               class={`text-sm font-medium transition-colors ${currentPath.includes('/blog') ? 'text-white' : 'text-gray-400 hover:text-white'}`}
             >
               Stories
-            </a>-->
+            </a>
             <a 
               href="/about" 
               class={`text-sm font-medium transition-colors ${currentPath.includes('/about') ? 'text-white' : 'text-gray-400 hover:text-white'}`}
@@ -132,7 +134,7 @@ const currentPath = Astro.url.pathname;
           <a href="/destinations" class="block py-2 text-sm font-medium text-gray-400 hover:text-white transition-colors">
             Destinations
           </a>
-          <a href="/tours" class="block py-2 text-sm font-medium text-gray-400 hover:text-white transition-colors">
+          <a href="/tour" class="block py-2 text-sm font-medium text-gray-400 hover:text-white transition-colors">
             Tours
           </a>
           <a href="/transfers" class="block py-2 text-sm font-medium text-gray-400 hover:text-white transition-colors">
@@ -252,6 +254,8 @@ const currentPath = Astro.url.pathname;
         </div>
       </div>
     </footer>
+    <WhatsAppButton />
+    <ContactSpecialist />
 
     <script>
       // Mobile menu toggle

@@ -2,19 +2,11 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { tours } from '../../data/tours';
 
-/* ================================
-   TYPES
-================================ */
-
 type CategoryKey =
   | 'lake-titicaca'
   | 'bolivia'
   | 'transfers'
   | 'packages';
-
-/* ================================
-   TOURS BY CATEGORY
-================================ */
 
 const toursByCategory: Record<CategoryKey, typeof tours> = {
   'lake-titicaca': tours.filter(t => t.category === 'lake-titicaca'),
@@ -22,10 +14,6 @@ const toursByCategory: Record<CategoryKey, typeof tours> = {
   'transfers': tours.filter(t => t.category === 'transfers'),
   'packages': tours.filter(t => t.category === 'packages')
 };
-
-/* ================================
-   CATEGORY INFO
-================================ */
 
 const categoryInfo: Record<CategoryKey, { title: string; description: string }> = {
   'lake-titicaca': {
@@ -46,9 +34,6 @@ const categoryInfo: Record<CategoryKey, { title: string; description: string }> 
   }
 };
 
-/* ================================
-   CATEGORY LABELS
-================================ */
 
 const categoryLabels: Record<CategoryKey, string> = {
   'lake-titicaca': 'Lake Titicaca',
@@ -57,9 +42,6 @@ const categoryLabels: Record<CategoryKey, string> = {
   'packages': 'Package'
 };
 
-/* ================================
-   PREPARE CATEGORIES DATA
-================================ */
 
 const categoriesData = (Object.entries(toursByCategory) as Array<[CategoryKey, typeof tours]>).map(([category, categoryTours]) => ({
   category,
@@ -68,9 +50,6 @@ const categoriesData = (Object.entries(toursByCategory) as Array<[CategoryKey, t
   label: categoryLabels[category]
 }));
 
-/* ================================
-   PRICE FORMAT
-================================ */
 
 const formatPrice = (price: number) => {
   return new Intl.NumberFormat('en-US', {

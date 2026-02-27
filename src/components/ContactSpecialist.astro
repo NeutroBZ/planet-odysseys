@@ -1,0 +1,174 @@
+---
+// src/components/ContactSpecialist.astro
+import { useState } from 'preact/hooks'; // Si usas Preact
+// Si no usas Preact, podemos hacerlo con JavaScript vanilla
+
+export interface Props {
+  isOpen?: boolean;
+}
+
+// Estado para controlar si el formulario está abierto/cerrado
+// Esto lo manejaremos con un script simple
+---
+
+<div 
+  class="fixed left-6 bottom-6 z-50 group"
+  id="contact-specialist-container"
+>
+  {/* Botón para abrir/cerrar */}
+  <button 
+    class="flex items-center gap-3 bg-gradient-to-r from-accent-blue to-accent-gold text-white px-6 py-4 rounded-full shadow-2xl hover:scale-105 transition-all duration-300"
+    id="contact-toggle"
+    aria-label="Contact a specialist"
+  >
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+    </svg>
+    <span class="font-semibold">Contact a Specialist</span>
+    <svg class="w-4 h-4 transition-transform duration-300" id="toggle-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+    </svg>
+  </button>
+
+  {/* Formulario desplegable */}
+  <div 
+    class="absolute bottom-full left-0 mb-4 w-96 glass-strong rounded-2xl p-6 opacity-0 invisible translate-y-4 transition-all duration-300"
+    id="contact-form"
+  >
+    <div class="absolute bottom-0 left-6 transform translate-y-1/2 rotate-45 w-4 h-4 bg-white/10 border-t border-l border-white/20"></div>
+    
+    <h3 class="text-2xl font-display font-bold mb-2 gradient-text">Talk to a Specialist</h3>
+    <p class="text-white/70 text-sm mb-6">
+      Get personalized advice from our local travel experts
+    </p>
+
+    <form 
+      action="/api/contact" 
+      method="POST" 
+      class="space-y-4"
+      id="specialist-form"
+    >
+      <div>
+        <label class="block text-sm text-white/60 mb-1">Name *</label>
+        <input 
+          type="text" 
+          name="name" 
+          required
+          class="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 focus:border-accent-gold focus:outline-none transition-colors text-white"
+          placeholder="Your name"
+        />
+      </div>
+
+      <div>
+        <label class="block text-sm text-white/60 mb-1">Email *</label>
+        <input 
+          type="email" 
+          name="email" 
+          required
+          class="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 focus:border-accent-gold focus:outline-none transition-colors text-white"
+          placeholder="your@email.com"
+        />
+      </div>
+
+      <div>
+        <label class="block text-sm text-white/60 mb-1">WhatsApp (optional)</label>
+        <input 
+          type="tel" 
+          name="phone" 
+          class="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 focus:border-accent-gold focus:outline-none transition-colors text-white"
+          placeholder="+51 969 355 221"
+        />
+      </div>
+
+      <div>
+        <label class="block text-sm text-white/60 mb-1">Message *</label>
+        <textarea 
+          name="message" 
+          rows="3"
+          required
+          class="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 focus:border-accent-gold focus:outline-none transition-colors text-white resize-none"
+          placeholder="Tell us about your travel plans..."
+        ></textarea>
+      </div>
+
+      <div class="flex items-center gap-2 text-sm text-white/60">
+        <input type="checkbox" id="whatsapp-consent" class="rounded bg-white/5 border-white/20" />
+        <label for="whatsapp-consent">I agree to receive messages on WhatsApp</label>
+      </div>
+
+      <button 
+        type="submit" 
+        class="btn-premium w-full"
+      >
+        <span>Send Message</span>
+      </button>
+
+      <p class="text-xs text-white/40 text-center">
+        We'll respond within 24 hours
+      </p>
+    </form>
+  </div>
+</div>
+
+<script>
+  // Script para manejar el toggle del formulario
+  (function() {
+    const container = document.getElementById('contact-specialist-container');
+    const toggleBtn = document.getElementById('contact-toggle');
+    const form = document.getElementById('contact-form');
+    const toggleIcon = document.getElementById('toggle-icon');
+    
+    if (toggleBtn && form && toggleIcon) {
+      toggleBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        const isOpen = form.classList.contains('opacity-100');
+        
+        if (isOpen) {
+          // Cerrar
+          form.classList.remove('opacity-100', 'visible', 'translate-y-0');
+          form.classList.add('opacity-0', 'invisible', 'translate-y-4');
+          toggleIcon.style.transform = 'rotate(0deg)';
+        } else {
+          // Abrir
+          form.classList.remove('opacity-0', 'invisible', 'translate-y-4');
+          form.classList.add('opacity-100', 'visible', 'translate-y-0');
+          toggleIcon.style.transform = 'rotate(180deg)';
+        }
+      });
+
+      // Cerrar al hacer click fuera
+      document.addEventListener('click', (e) => {
+        if (!container.contains(e.target)) {
+          form.classList.remove('opacity-100', 'visible', 'translate-y-0');
+          form.classList.add('opacity-0', 'invisible', 'translate-y-4');
+          toggleIcon.style.transform = 'rotate(0deg)';
+        }
+      });
+    }
+
+    // Manejar el envío del formulario
+    const specialistForm = document.getElementById('specialist-form');
+    if (specialistForm) {
+      specialistForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const formData = new FormData(specialistForm);
+        const data = Object.fromEntries(formData);
+        
+        // Aquí puedes enviar los datos a tu API
+        console.log('Form data:', data);
+        
+        // Mostrar mensaje de éxito
+        alert('Thank you! A specialist will contact you soon.');
+        
+        // Resetear y cerrar
+        specialistForm.reset();
+        form.classList.remove('opacity-100', 'visible', 'translate-y-0');
+        form.classList.add('opacity-0', 'invisible', 'translate-y-4');
+        toggleIcon.style.transform = 'rotate(0deg)';
+      });
+    }
+  })();
+</script>

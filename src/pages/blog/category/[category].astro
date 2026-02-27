@@ -1,0 +1,58 @@
+---
+// src/pages/blog/category/[category].astro
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { getAllBlogPosts, formatBlogDate } from '../../../data/blog';
+
+export async function getStaticPaths() {
+  const posts = await getAllBlogPosts();
+  const categories = new Set<string>();
+  posts.forEach(post => {
+    post.categories?.forEach(cat => categories.add(cat));
+  });
+  
+  return Array.from(categories).map(category => ({
+    params: { category: category.toLowerCase().replace(/\s+/g, '-') },
+    props: { category }
+  }));
+}
+
+const { category } = Astro.props;
+const allPosts = await getAllBlogPosts();
+const categoryPosts = allPosts.filter(post => 
+  post.categories?.some(cat => 
+    cat.toLowerCase().replace(/\s+/g, '-') === category
+  )
+);
+---
+
+<BaseLayout 
+  title={`${category} Articles | Planet Odysseys Blog`}
+  description={`Read our articles about ${category}`}
+>
+
+<main class="min-h-screen">
+  {/* Hero simplificado */}
+  <section class="pt-32 pb-16">
+    <div class="container-custom">
+      <h1 class="text-4xl md:text-5xl font-display font-bold mb-4">
+        Category: <span class="gradient-text">{category}</span>
+      </h1>
+      <p class="text-xl text-white/70">
+        {categoryPosts.length} article{categoryPosts.length !== 1 ? 's' : ''}
+      </p>
+    </div>
+  </section>
+
+  {/* Grid de posts */}
+  <section class="pb-20">
+    <div class="container-custom">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {categoryPosts.map(post => (
+          <!-- Misma tarjeta que en index.astro -->
+        ))}
+      </div>
+    </div>
+  </section>
+</main>
+
+</BaseLayout>
