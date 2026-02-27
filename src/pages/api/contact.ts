@@ -1,7 +1,6 @@
 // src/pages/api/contact.ts
 import type { APIRoute } from 'astro';
-import nodemailer from 'nodemailer';
-
+// import nodemailer from 'nodemailer';
 // Configuración SMTP de SiteGround
 const transporter = nodemailer.createTransport({
   host: 'mail.tudominio.com', // Reemplaza con tu dominio
